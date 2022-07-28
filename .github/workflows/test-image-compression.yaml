@@ -21,7 +21,9 @@ jobs:
         if: steps.calibre.outputs.markdown != ''
         uses: peter-evans/create-pull-request@v3
         with:
-          title: ":robot: Images compressed in GitHub Actions"
-          branch-suffix: timestamp
           commit-message: ":robot: Images compressed in GitHub Actions"
+          title: ":robot: Images compressed in GitHub Actions"
           body: ${{ steps.calibre.outputs.markdown }}
+          branch: "automated-pr/compress-images"
+          branch-suffix: timestamp
+          delete-branch: true
