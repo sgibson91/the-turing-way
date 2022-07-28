@@ -1,0 +1,27 @@
+name: "Testing image compression"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  compress-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Compress Images
+        id: calibre
+        uses: calibreapp/image-actions@main
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          compressOnly: true
+
+      - name: Create New Pull Request If Needed
+        if: steps.calibre.outputs.markdown != ''
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: ":robot: Images compressed in GitHub Actions"
+          branch-suffix: timestamp
+          commit-message: ":robot: Images compressed in GitHub Actions"
+          body: ${{ steps.calibre.outputs.markdown }}
